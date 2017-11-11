@@ -20,7 +20,11 @@ int count_words(FILE *file, int char_len){
 
 void main(int argc, char *argv[]){
 	
+	
 	char* filepath = argv[1];
+	if(filepath == NULL){
+		
+	}else{
 	int char_count=-1, line_count =0, word_count=0;
 	FILE *file;
 	char current_char;
@@ -41,7 +45,9 @@ void main(int argc, char *argv[]){
 		word_count = count_words(file,char_count);
 		fclose(file);
 		printf(" %d %d %d %s \n", line_count, word_count, char_count,filepath);
+		}
 	}
+	
 	return;
 }
 
