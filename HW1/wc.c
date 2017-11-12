@@ -2,34 +2,39 @@
 // Yogev Swisa 313226912 + Amjad Tarif 203497391 - OS - HW1
 #include <stdio.h>
 
-int count_words(FILE *file, int char_len){
+int count_words(FILE *file){
 	
-	int wordcount =0, i,j=0;
-	char filestring[char_len];
-	filestring[0] = getc(file);
-	for(i=1; i <= char_len; i++){
-		filestring[i] = getc(file);
-		if( (filestring[j] == ' ' && filestring[j+1] != ' ' && filestring[j+1] != '\n')  || (filestring[j] == '\n' && j != ( char_len -1 ) && filestring[j+1] != ' ' && filestring[j+1] != '\n' ) )		
-			wordcount++;
-		j++;
-	}
-	if(filestring[0] != ' ' && char_len > 1  && filestring[0] != '\n')
+	int char_count=0, line_count =0;
+	if(file == NULL)
+		file = stdin;
+	int wordcount =0;
+	char tmp1 = getc(file),tmp2 = getc(file);
+	if(tmp1 != ' '   && tmp1 != '\n' && tmp2 != EOF)
 		wordcount++;
+	while(tmp1 != EOF){
+		if(tmp1 == '\n')
+			line_count++;
+		if( (tmp1 == ' ' && tmp2 != ' ' && tmp2 != '\n')  || (tmp1 == '\n' && tmp2 != ' ' && tmp2 != '\n' && tmp2 != EOF ) )		
+			wordcount++;
+		char_count++;
+		tmp1 = tmp2;
+		tmp2 = getc(file);
+	}
+	if(file == stdin)
+		printf(" %d %d %d \n", line_count, wordcount, char_count);
 	return wordcount;
 }
 
 void main(int argc, char *argv[]){
 	
-	
+	int char_count=-1, line_count =0, word_count=0;
 	char* filepath = argv[1];
 	if(filepath == NULL){
-		
+		word_count = count_words(NULL);
 	}else{
-	int char_count=-1, line_count =0, word_count=0;
 	FILE *file;
 	char current_char;
 	file = fopen(filepath,"r");
-	
 	if(file == NULL)
 		printf("The file not found\n");	
 	else{
@@ -42,13 +47,10 @@ void main(int argc, char *argv[]){
 		if(line_count == 0 && char_count > 0)
 			line_count = 1 ;
 		rewind(file);
-		word_count = count_words(file,char_count);
+		word_count = count_words(file);
 		fclose(file);
 		printf(" %d %d %d %s \n", line_count, word_count, char_count,filepath);
 		}
 	}
-	
 	return;
 }
-
-
